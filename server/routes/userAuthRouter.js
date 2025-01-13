@@ -8,7 +8,7 @@ const userAuthRouter = express.Router();
 // create user
 userAuthRouter.post("/signup", signUp);
 // Check email exist 
-userAuthRouter.post("/check", checkEmail);
+userAuthRouter.post("/email", checkEmail);
 // Enter Password
 userAuthRouter.post("/signin", signIn);
 // GET User detail

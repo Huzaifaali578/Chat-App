@@ -11,8 +11,8 @@ export async function signUp(req, res) {
         // if user exist
         if (checkUser) {
             return res.status(400).json({
-                message: "User is already exist",
-                error: true
+                message: "User is already exist please Login",
+                success: false
             })
         };
         // if user not exist hashinsh pasaword
@@ -27,7 +27,7 @@ export async function signUp(req, res) {
         const user = new userModel(payload);
         const userSaved = await user.save();
         res.status(200).json({
-            message: "User create successFully",
+            message: "User create successFully go to Login Page and Login your account",
             data: userSaved,
             success: true
         })
@@ -36,7 +36,7 @@ export async function signUp(req, res) {
     } catch (error) {
         res.status(500).json({
             message: error.message || error,
-            error: true
+            success: false
         })
     }
 };
@@ -50,19 +50,20 @@ export async function checkEmail(req, res) {
         if (!userCheck) {
             return res.status(400).json({
                 message: "User Not Found",
-                error: true
+                success: false
             })
         };
 
         res.status(200).json({
             message: "user found",
-            data: userCheck
+            data: userCheck,
+            success: true
         })
         
     }catch(error) {
         res.status(500).json({
             message: error.message || error,
-            error: true
+            success: false
         })
     }
 }
@@ -70,7 +71,7 @@ export async function checkEmail(req, res) {
 export async function signIn(req, res) {
     try {
         const { password, userId } = req.body;
-        // console.log(password)
+        console.log(password)
         // check user 
         const user = await userModel.findOne({ _id : userId });
         // console.log(user)
@@ -80,7 +81,7 @@ export async function signIn(req, res) {
         if (!confirmPassword) {
             return res.status(400).json({
                 message: "wrong password",
-                error: true
+                success: false
             })
         };
         // JWT Token
@@ -104,7 +105,7 @@ export async function signIn(req, res) {
     } catch (error) {
         return res.status(500).json({
             message: error.message || error,
-            error: true
+            success: false
         })
     }
 }
