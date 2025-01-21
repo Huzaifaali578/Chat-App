@@ -6,6 +6,7 @@ import connectDB from "./config/connectDB.js";
 import cookieParser from "cookie-parser";
 import userAuthRouter from "./routes/userAuthRouter.js";
 import userDetailRouter from "./routes/userDetailRouter.js";
+import userSearchRouter from "./routes/userSearchRouter.js";
 
 const app = express()
 
@@ -25,6 +26,7 @@ app.get('/', (req, res) => {
 // API endpoints
 app.use("/api", userAuthRouter)
 app.use("/api", userDetailRouter)
+app.use("/api", userSearchRouter)
 
 const PORT = process.env.PORT
 app.listen( PORT, () => {

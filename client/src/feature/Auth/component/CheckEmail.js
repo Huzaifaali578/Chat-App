@@ -31,7 +31,7 @@ function CheckEmail() {
 
   return (
     <>
-      {checkEmailUser?.success && <Navigate to="/password" />}
+      {checkEmailUser?.success && <Navigate to="/signin" />}
       <div className="mt-5">
         <div className="bg-white w-full max-w-md mx-auto p-4 overflow-hidden rounded shadow-md">
           <div className='w-fit mx-auto mb-5 rounded-full'>

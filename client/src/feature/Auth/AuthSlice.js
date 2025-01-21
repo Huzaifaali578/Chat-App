@@ -1,16 +1,18 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { checkEmail, signInApi, signUpAPI } from "./authAPI";
+import { checkEmail, logOutApi, signInApi, signUpAPI } from "./authAPI";
+import { FaLeaf } from "react-icons/fa";
 
 const initialState = {
     signUpStatus: null,
     checkEmailUser: null,
     loggedInUser: null,
     status: "idle", 
+    logOutUser: {success: false},
 };
 
 // Async Thunk for Sign Up API
 export const signUpAPIAsync = createAsyncThunk(
-    "user/signUpAPI",
+    "auth/signUpAPI",
     async (userData) => {
         const response = await signUpAPI(userData); // API call
         return response.data; // Assumes response contains `data`
@@ -19,7 +21,7 @@ export const signUpAPIAsync = createAsyncThunk(
 
 // Async Thunk for check email API
 export const checkEmailAsync = createAsyncThunk(
-    "user/checkEmail",
+    "auth/checkEmail",
     async ({email}) => {
         const response = await checkEmail({email});
         return response.data;
@@ -28,16 +30,25 @@ export const checkEmailAsync = createAsyncThunk(
 
 // Async Thunk for check email API
 export const signInApiAsync = createAsyncThunk(
-    'user/signInApi',
+    'auth/signInApi',
     async (password) => {
         const response = await signInApi(password);
         // console.log(response.data)
         return response.data;
     }
 )
+// Async Thunk for LogOut API
+export const logOutApiAsync = createAsyncThunk(
+    'auth/logOutApi',
+    async () => {
+        const response = await logOutApi();
+        return response.data
+    }
+)
+
 // Create a Slice for Auth
 export const authSlice = createSlice({
-    name: "user",
+    name: "auth",
     initialState,
     reducers: {}, // Omit this if no synchronous reducers
     extraReducers: (builder) => {
@@ -71,6 +82,16 @@ export const authSlice = createSlice({
             })
             .addCase(signInApiAsync.rejected, (state) => {
                 state.status = "failed";
+            })
+            .addCase(logOutApiAsync.pending, (state) => {
+                state.status = "loading";
+            })
+            .addCase(logOutApiAsync.fulfilled, (state, action) => {
+                state.status = "idle";
+                state.logOutUser = action.payload;
+            })
+            .addCase(logOutApiAsync.rejected, (state) => {
+                state.status = "failed";
             });
     },
 });
@@ -79,6 +100,7 @@ export const authSlice = createSlice({
 export const selectSignUpStatus = (state) => state.user.signUpStatus;
 export const selectCheckEmailUser = (state) => state.user.checkEmailUser;
 export const selectLoggedInUser = (state) => state.user.loggedInUser;
+export const selecLogOutUser = (state) => state.user.logOutUser;
 
 // Export Reducer
 const authReducer = authSlice.reducer;

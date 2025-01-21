@@ -1,5 +1,5 @@
 import React from 'react'
-import logo from "../../assets/Chat App_20250109_230045_0000.png"
+import logo from "../../assets/logo_image.png"
 
 function Logo({ children }) {
     return (

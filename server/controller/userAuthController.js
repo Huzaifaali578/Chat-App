@@ -71,10 +71,8 @@ export async function checkEmail(req, res) {
 export async function signIn(req, res) {
     try {
         const { password, userId } = req.body;
-        console.log(password)
         // check user 
         const user = await userModel.findOne({ _id : userId });
-        // console.log(user)
         const hashedPassword = user.password
         // compare password
         const confirmPassword = await bcrypt.compare(password, hashedPassword)
@@ -92,14 +90,14 @@ export async function signIn(req, res) {
         const token = jwt.sign(tokenData, process.env.JWT_SECREAT_KEY, { expiresIn: "1d" })
 
         const cookieOptions = {
-            http: true,
+            httpOnly: true,
             secure: true
         }
         
         res.cookie("token", token, cookieOptions ).status(200).json({
             message: "Login successfull",
             token: token,
-            success: true
+            success: true,
         })
         
     } catch (error) {
@@ -117,11 +115,13 @@ export async function Logout(req, res) {
             secure: true
         }
         return res.cookie("token", '', cookieOptions).status(200).json({
-            message: "LogOut Successfull"
+            message: "LogOut Successfull",
+            success: true
         })
     } catch (error) {
         return res.status(500).json({
-            message: error.message || error
+            message: error.message || error,
+            success: false
         })
     }
 }
